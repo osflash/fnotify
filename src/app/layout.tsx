@@ -11,11 +11,15 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
+const title = process.env.NEXT_PUBLIC_TITLE
+const description = process.env.NEXT_PUBLIC_DESCRIPTION
+
 export const metadata = {
   title: {
-    default: 'FNotify',
-    template: '%s | FNotify'
-  }
+    default: title,
+    template: `%s | ${title}`
+  },
+  description
 }
 
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {

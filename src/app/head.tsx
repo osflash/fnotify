@@ -1,6 +1,3 @@
-const title = process.env.NEXT_PUBLIC_TITLE
-const description = process.env.NEXT_PUBLIC_DESCRIPTION
-
 const Head = () => {
   return (
     <>
