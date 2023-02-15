@@ -38,6 +38,13 @@ export const authOptions: NextAuthOptions = {
         })
       }
     }
+  },
+  pages: {
+    signIn: '/',
+    signOut: '/',
+    error: '/',
+    verifyRequest: '/',
+    newUser: '/'
   }
 }
 
