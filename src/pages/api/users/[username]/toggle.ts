@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import nc from 'next-connect'
 
+import { getClientIp } from 'request-ip'
+
 import { getUsernameSchema, subscriptionSchema } from '~/libs/push'
 
 import { prisma } from '~/services/prisma'
@@ -18,7 +20,9 @@ handler.post(async (req, res) => {
     keys: { auth, p256dh }
   } = subscriptionSchema.parse(req.body)
 
-  const { success } = await ratelimit.limit('toggle')
+  const ip = getClientIp(req)
+
+  const { success } = await ratelimit.limit(`${username}/toggle/${ip}`)
 
   if (!success) {
     throw new StatusCodeError(429, 'Não faça DDoS')

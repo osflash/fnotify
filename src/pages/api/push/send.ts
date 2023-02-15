@@ -1,6 +1,7 @@
 import { NextApiResponse } from 'next'
 import nc from 'next-connect'
 
+import { getClientIp } from 'request-ip'
 import WebPush from 'web-push'
 import { WebPushError } from 'web-push'
 
@@ -9,6 +10,9 @@ import { payloadSchema } from '~/libs/push'
 import { baseUrl } from '~/libs/utils'
 
 import { prisma } from '~/services/prisma'
+import { ratelimit } from '~/services/upstash'
+
+import { StatusCodeError } from '~/next-connect/onError'
 
 const handler = nc<AuthNextApiRequest, NextApiResponse>()
 
@@ -22,12 +26,20 @@ handler.use(userAuth)
 handler.post(async (req, res) => {
   const payload = payloadSchema.parse(req.body)
 
+  const ip = getClientIp(req)
+
+  const { success } = await ratelimit.limit(`send/${ip}`)
+
+  if (!success) {
+    throw new StatusCodeError(429, 'Não faça DDoS')
+  }
+
   const subscriptions = await prisma.subscription.findMany({
     where: { userId: req.user.id }
   })
 
   if (subscriptions.length === 0) {
-    return res.status(404).end('')
+    throw new StatusCodeError(404, '')
   }
 
   const notifications = subscriptions.map(
