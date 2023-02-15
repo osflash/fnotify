@@ -24,16 +24,16 @@ export const NotificationForm: React.FC = () => {
         url: ''
       },
       actions: undefined,
-      badge: '',
+      badge: undefined,
       body: '',
-      dir: 'auto',
-      icon: '',
-      image: '',
-      lang: '',
+      dir: undefined,
+      icon: undefined,
+      image: undefined,
+      lang: undefined,
       renotify: undefined,
       requireInteraction: undefined,
       silent: undefined,
-      tag: '',
+      tag: undefined,
       timestamp: undefined,
       vibrate: undefined
     })
