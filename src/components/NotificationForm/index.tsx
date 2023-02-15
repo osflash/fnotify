@@ -5,13 +5,7 @@ import { FormEvent, useState } from 'react'
 import { PayloadInput } from '~/libs/push'
 
 export const NotificationForm: React.FC = () => {
-  const [payload, setPayload] = useState<PayloadInput>({
-    data: {
-      title: '',
-      url: ''
-    },
-    body: ''
-  })
+  const [payload, setPayload] = useState<PayloadInput>({})
 
   const { data } = payload
 
@@ -29,7 +23,19 @@ export const NotificationForm: React.FC = () => {
         title: '',
         url: ''
       },
-      body: ''
+      actions: undefined,
+      badge: '',
+      body: '',
+      dir: 'auto',
+      icon: '',
+      image: '',
+      lang: '',
+      renotify: undefined,
+      requireInteraction: undefined,
+      silent: undefined,
+      tag: '',
+      timestamp: undefined,
+      vibrate: undefined
     })
   }
 
@@ -41,7 +47,6 @@ export const NotificationForm: React.FC = () => {
       <label htmlFor="title" className="font-semibold leading-tight">
         Titulo
       </label>
-
       <input
         type="text"
         id="title"
@@ -58,15 +63,27 @@ export const NotificationForm: React.FC = () => {
       <label htmlFor="body" className="mt-2 font-semibold leading-tight">
         Descrição
       </label>
-
       <input
         type="text"
         id="body"
-        required
         placeholder="Estou online na Twitch!"
         className="mt-2 rounded-lg p-3"
         value={payload.body}
         onChange={e => setPayload(prev => ({ ...prev, body: e.target.value }))}
+      />
+
+      <label htmlFor="url" className="mt-2 font-semibold leading-tight">
+        Site
+      </label>
+      <input
+        type="text"
+        id="url"
+        placeholder="https://www.twitch.tv/osflash"
+        className="mt-2 rounded-lg p-3"
+        value={data?.url}
+        onChange={e =>
+          setPayload(prev => ({ ...prev, data: { url: e.target.value } }))
+        }
       />
 
       <button

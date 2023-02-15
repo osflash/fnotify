@@ -34,12 +34,10 @@ sw.addEventListener('notificationclick', event => {
     const data = notification.data
 
     if (data?.url) {
-      const urlToOpen = new URL(
-        `external?url=${data.url}`,
-        self.location.origin
-      )
+      const { url } = data
+      // const urlToOpen = new URL(`external?url=${url}`, self.location.origin)
 
-      clients.openWindow(urlToOpen)
+      clients.openWindow(url)
     }
   }
 
