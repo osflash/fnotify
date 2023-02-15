@@ -1,6 +1,8 @@
 {
   "name": "FNotify",
   "short_name": "FNotify",
+  "description": "App de notificações!",
+  "start_url": "/",
   "theme_color": "#333333",
   "background_color": "#333333",
   "display": "standalone",
