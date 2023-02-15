@@ -25,7 +25,7 @@ export const metadata = {
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <ServerThemeProvider defaultTheme="system" enableSystem>
-      <html lang="pt-br" suppressHydrationWarning>
+      <html lang="pt-br">
         <head />
         <body>
           <Providers>

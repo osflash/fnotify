@@ -4,8 +4,6 @@ import { FormEvent, useState } from 'react'
 
 import { PayloadInput } from '~/libs/push'
 
-import { sendNotification } from '~/services/push/send'
-
 export const NotificationForm: React.FC = () => {
   const [payload, setPayload] = useState<PayloadInput>({
     data: {
@@ -20,7 +18,11 @@ export const NotificationForm: React.FC = () => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
 
-    await sendNotification(payload)
+    await fetch(`/api/push/send`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
 
     setPayload({
       data: {

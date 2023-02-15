@@ -22,19 +22,23 @@ const handler = nc<NextApiRequest, NextApiResponse<UserResponse>>({ onError })
 handler.get(async (req, res) => {
   const { username } = getUsernameSchema.parse(req.query)
 
-  const user = await prisma.user.findUnique({ where: { username } })
+  const user = await prisma.user.findUnique({
+    where: { username },
+    select: {
+      username: true,
+      image: true,
+      subscriptions: true
+    }
+  })
 
   if (!user) {
     throw new Error('Desculpe, o usuário não foi encontrado!')
   }
 
-  const userId = user.id
-
-  const subscriptions = await prisma.subscription.findMany({
-    where: { userId }
+  const userBody = userSchema.parse({
+    ...user,
+    follows: user.subscriptions.length
   })
-
-  const userBody = userSchema.parse({ ...user, follows: subscriptions.length })
 
   res.status(201).json(userBody)
 })

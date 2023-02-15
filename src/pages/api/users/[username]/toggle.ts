@@ -4,8 +4,11 @@ import nc from 'next-connect'
 import { getUsernameSchema, subscriptionSchema } from '~/libs/push'
 
 import { prisma } from '~/services/prisma'
+import { ratelimit } from '~/services/upstash'
 
-const handler = nc<NextApiRequest, NextApiResponse<boolean>>()
+import { onError, StatusCodeError } from '~/next-connect/onError'
+
+const handler = nc<NextApiRequest, NextApiResponse<boolean>>({ onError })
 
 handler.post(async (req, res) => {
   const { username } = getUsernameSchema.parse(req.query)
@@ -14,6 +17,12 @@ handler.post(async (req, res) => {
     endpoint,
     keys: { auth, p256dh }
   } = subscriptionSchema.parse(req.body)
+
+  const { success } = await ratelimit.limit('toggle')
+
+  if (!success) {
+    throw new StatusCodeError(429, 'Não faça DDoS')
+  }
 
   const user = await prisma.user.findUnique({
     where: { username }

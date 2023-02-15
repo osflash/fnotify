@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
-import { RequestHandler } from 'next-connect'
+import type { RequestHandler } from 'next-connect'
 
 import { User } from '@prisma/client'
 

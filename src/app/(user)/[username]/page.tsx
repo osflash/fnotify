@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { getUserByUsername } from '~/services/users/username'
+import { prisma } from '~/services/prisma'
 
 import { Boundary } from '~/components/Boundary'
 
@@ -12,19 +12,23 @@ interface PageProps {
   }
 }
 
-export const generateMetadata = async ({ params }: PageProps) => {
-  return {}
-}
-
 export const dynamicParams = true
+export const revalidate = 60
 
 export const generateStaticParams = async () => {
-  return []
+  const user = await prisma.user.findMany({ select: { username: true } })
+
+  return user
 }
 
 const Page = async ({ params: { username } }: PageProps) => {
-  const user = await getUserByUsername(username, {
-    next: { revalidate: 30 }
+  const user = await prisma.user.findUnique({
+    where: { username },
+    select: {
+      username: true,
+      image: true,
+      subscriptions: true
+    }
   })
 
   if (!user) return notFound()
@@ -33,7 +37,7 @@ const Page = async ({ params: { username } }: PageProps) => {
     <Boundary>
       <div className="flex flex-col items-center justify-center gap-2">
         <h1>{user.username}</h1>
-        <p>{user.follows} seguidores!</p>
+        <p>{user.subscriptions.length} seguidores!</p>
 
         <Subscription username={username} />
       </div>

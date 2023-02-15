@@ -1,9 +1,5 @@
 'use client'
 
-import { baseUrl } from '~/libs/utils'
-
-import { toggleSubscriptionByUsername } from '~/services/users/username'
-
 import { useSubscribed } from '~/hooks/useSubscribed'
 
 import { Button } from '~/components/Button'
@@ -17,7 +13,7 @@ export const SubscribedButton: React.FC<SubscribedButtonProps> = ({
   username,
   subscription
 }) => {
-  const url = `${baseUrl}/api/users/${username}/subscription`
+  const url = `/api/users/${username}/subscription`
   const { endpoint } = subscription
 
   const { isLoading, data, error, mutate } = useSubscribed(url, {
@@ -25,7 +21,13 @@ export const SubscribedButton: React.FC<SubscribedButtonProps> = ({
   })
 
   const handleClick = async () => {
-    const data = await toggleSubscriptionByUsername(username, subscription)
+    const response = await fetch(`/api/users/${username}/toggle`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(subscription.toJSON())
+    })
+
+    const data = (await response.json()) as boolean
 
     await mutate(data, false)
   }

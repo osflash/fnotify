@@ -18,17 +18,20 @@ handler.get(async (req, res) => {
     ...req.headers
   })
 
-  const user = await prisma.user.findUnique({ where: { username } })
+  const user = await prisma.user.findUnique({
+    where: { username },
+    select: {
+      subscriptions: {
+        where: { endpoint }
+      }
+    }
+  })
 
   if (!user) {
     throw new Error('Desculpe, o usuário não foi encontrado!')
   }
 
-  const subscription = await prisma.subscription.findFirst({
-    where: { endpoint }
-  })
-
-  res.status(201).json(!!subscription)
+  res.status(201).json(!!user.subscriptions.length)
 })
 
 export default handler
