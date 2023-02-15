@@ -2,7 +2,7 @@ import { BsGithub } from 'react-icons/bs'
 
 import Link from 'next/link'
 
-const url = process.env.NEXT_PUBLIC_GITHUB || ''
+const url = process.env.NEXT_PUBLIC_GITHUB!
 
 export const ButtonGithub: React.FC = () => {
   return (
