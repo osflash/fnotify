@@ -3,8 +3,6 @@
 import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 
-import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
-
 import { useServiceWorker } from '~/hooks/useServiceWorker'
 
 interface ProvidersProps {
@@ -17,12 +15,14 @@ export const Providers: React.FC<ProvidersProps> = ({ children }) => {
   return (
     <>
       <SessionProvider>
-        <NextThemesProvider defaultTheme="system" enableSystem>
+        <NextThemesProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+        >
           <>{children}</>
         </NextThemesProvider>
       </SessionProvider>
-
-      <VercelAnalytics />
     </>
   )
 }
